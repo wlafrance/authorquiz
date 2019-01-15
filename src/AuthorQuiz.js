@@ -12,11 +12,27 @@ function Hero(){
     </div>
   );
 }
-function Turn(){
-  return (<div></div>);
+function Turn({author,books}){
+  return (
+  <div className="row turn" style={{backgroundColor:"White"}}>
+    <div className="col-4 offset-1">
+      <img src={author.imageUrl} className="authorimage" alt="author">
+      </img>
+    </div>        
+    <div className="col-6">
+      {books.map((title) => <p>{title}</p>)}
+
+    </div>
+
+  </div>);
 }
 function Continue(){
-  return (<div></div>);
+  return (<div>Continue</div>);
+}
+function Footer(){
+  return (<div className="row">
+  <p className="text-muted credit">All images are from <a target="_blank" href="https://commons.wikimedia.org/wiki/Main_Page">Wvikemedia Commons</a> and are in the pubic domain</p>
+  </div>);
 }
 class AuthorQuiz extends Component {
   render() {
@@ -26,6 +42,7 @@ class AuthorQuiz extends Component {
       <Hero />
       <Turn />
       <Continue />
+      <Footer></Footer>
       </div>
     );
   }
