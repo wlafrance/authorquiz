@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './AuthorQuiz.css';
 import './bootstrap.min.css';
 
+
 function Hero(){
   return (
     <div className="row">
@@ -12,6 +13,12 @@ function Hero(){
     </div>
   );
 }
+
+function Book({title}){
+return (<div className="answer">
+<h4>{title}</h4></div>)
+}
+
 function Turn({author,books}){
   return (
   <div className="row turn" style={{backgroundColor:"White"}}>
@@ -20,7 +27,7 @@ function Turn({author,books}){
       </img>
     </div>        
     <div className="col-6">
-      {books.map((title) => <p>{title}</p>)}
+      {books.map((title) => <Book title={title} key={title} />)}
 
     </div>
 
@@ -34,18 +41,17 @@ function Footer(){
   <p className="text-muted credit">All images are from <a target="_blank" href="https://commons.wikimedia.org/wiki/Main_Page">Wvikemedia Commons</a> and are in the pubic domain</p>
   </div>);
 }
-class AuthorQuiz extends Component {
-  render() {
+function AuthorQuiz({turnData}) {
     return (
     
       <div className="container-fluid">
       <Hero />
-      <Turn />
+      <Turn {...turnData} />
       <Continue />
       <Footer></Footer>
       </div>
     );
-  }
+  
 }
 
 export default AuthorQuiz;
