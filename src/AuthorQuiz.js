@@ -19,9 +19,15 @@ return (<div className="answer">
 <h4>{title}</h4></div>)
 }
 
-function Turn({author,books}){
+function Turn({author,books,highlight}){
+  function highlistToBgColor(highlight){
+    const mapping = {
+      'none':'','correct': 'green', 'wrong': 'red'
+    };
+    return mapping[highlight];
+  }
   return (
-  <div className="row turn" style={{backgroundColor:"White"}}>
+  <div className="row turn" style={{backgroundColor:highlistToBgColor(highlight)}}>
     <div className="col-4 offset-1">
       <img src={author.imageUrl} className="authorimage" alt="author">
       </img>
@@ -41,14 +47,39 @@ function Footer(){
   <p className="text-muted credit">All images are from <a target="_blank" href="https://commons.wikimedia.org/wiki/Main_Page">Wvikemedia Commons</a> and are in the pubic domain</p>
   </div>);
 }
-function AuthorQuiz({turnData}) {
+
+class EvenCounter extends React.Component{
+  constructor (props){
+    super(props);
+    this.state = {clicks:0};
+    this.clickHandler = this.clickHandler.bind(this);
+  }
+  clickHandler(event){
+    const clicksNew = this.state.clicks +1;
+    this.setState({clicks:clicksNew});
+    if(clicksNew % 2 ===0){
+      this.props.onEventClick(clicksNew);
+    }
+  }
+  render(){
+    return <div onClick={this.clickHandler}>
+    This div has been clicked {this.state.clicks} times.</div>
+  }
+}
+
+function AuthorQuiz({turnData, highlight}) {
     return (
     
       <div className="container-fluid">
+     
+       
       <Hero />
-      <Turn {...turnData} />
+      <Turn {...turnData} highlight={highlight} />
       <Continue />
       <Footer></Footer>
+      <h2>A bit of extra fun</h2>
+      <EvenCounter onEventClick={(data) =>{
+       console.log(`even number ${data}`)}} />
       </div>
     );
   
