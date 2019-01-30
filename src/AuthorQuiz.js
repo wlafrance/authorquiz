@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 // import logo from './logo.svg';
 import './AuthorQuiz.css';
 import './bootstrap.min.css';
+
 
 
 function Hero(){
@@ -14,31 +16,40 @@ function Hero(){
   );
 }
 
-function Book({title}){
-return (<div className="answer">
+function Book({title,onClick}){
+return (<div className="answer" onClick={()=>{onClick(title)}}>
 <h4>{title}</h4></div>)
 }
 
-function Turn({author,books,highlight}){
+function Turn({author,books,highlight,onAnswerSelected}){
   function highlistToBgColor(highlight){
     const mapping = {
       'none':'','correct': 'green', 'wrong': 'red'
     };
     return mapping[highlight];
   }
-  return (
-  <div className="row turn" style={{backgroundColor:highlistToBgColor(highlight)}}>
+  return (<div className="row turn" style={{backgroundColor:highlistToBgColor(highlight)}}>
     <div className="col-4 offset-1">
       <img src={author.imageUrl} className="authorimage" alt="author">
       </img>
     </div>        
     <div className="col-6">
-      {books.map((title) => <Book title={title} key={title} />)}
-
+     {books.map((title) => <Book title={title} key={title}     onClick={onAnswerSelected} />)}
     </div>
-
   </div>);
 }
+Turn.propTypes = {
+  author: PropTypes.shape({
+    name : PropTypes.string.isRequired,
+    imageUrl : PropTypes.string.isRequired,
+    imageSource:PropTypes.string.isRequired,
+    books: PropTypes.arrayOf(PropTypes.string).isRequired
+  }),
+  books:PropTypes.arrayOf(PropTypes.string).isRequired,
+  onAnswerSelected :PropTypes.func.isRequired,
+  highlight:PropTypes.string.isRequired
+};
+
 function Continue(){
   return (<div>Continue</div>);
 }
@@ -48,38 +59,36 @@ function Footer(){
   </div>);
 }
 
-class EvenCounter extends React.Component{
-  constructor (props){
-    super(props);
-    this.state = {clicks:0};
-    this.clickHandler = this.clickHandler.bind(this);
-  }
-  clickHandler(event){
-    const clicksNew = this.state.clicks +1;
-    this.setState({clicks:clicksNew});
-    if(clicksNew % 2 ===0){
-      this.props.onEventClick(clicksNew);
-    }
-  }
-  render(){
-    return <div onClick={this.clickHandler}>
-    This div has been clicked {this.state.clicks} times.</div>
-  }
-}
+// class EvenCounter extends React.Component{
+//   constructor (props){
+//     super(props);
+//     this.state = {clicks:0};
+//     this.clickHandler = this.clickHandler.bind(this);
+//   }
+//   clickHandler(event){
+//     const clicksNew = this.state.clicks +1;
+//     this.setState({clicks:clicksNew});
+//     if(clicksNew % 2 ===0){
+//       this.props.onEventClick(clicksNew);
+//     }
+//   }
+//   render(){
+//    return <div onClick={this.clickHandler}>
+//     This div has been clicked {this.state.clicks} times.</div>
+//   }
+//}
 
-function AuthorQuiz({turnData, highlight}) {
+function AuthorQuiz({turnData, highlight,onAnswerSelected}) {
     return (
     
       <div className="container-fluid">
      
        
       <Hero />
-      <Turn {...turnData} highlight={highlight} />
+      <Turn {...turnData} highlight={highlight} onAnswerSelected={onAnswerSelected} />
       <Continue />
       <Footer></Footer>
-      <h2>A bit of extra fun</h2>
-      <EvenCounter onEventClick={(data) =>{
-       console.log(`even number ${data}`)}} />
+     
       </div>
     );
   
